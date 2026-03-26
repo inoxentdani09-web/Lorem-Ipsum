@@ -1,6 +1,7 @@
-<<<<<<< HEAD
+/* Tailwind import */
 @import "tailwindcss";
 
+/* Custom font */
 .fjalla-one-regular {
   font-family: "Fjalla One", sans-serif;
   font-weight: 400;
@@ -10,8 +11,8 @@
 .banner::-webkit-scrollbar {
   display: none;
   overflow-x: auto;
+}
 
-=======
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -21,8 +22,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Code font */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
->>>>>>> 710f12c9cca4c4936ffa065334fa318423ebc71f
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
