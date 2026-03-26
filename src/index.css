@@ -1,7 +1,12 @@
+
 /* Tailwind import */
 @import "tailwindcss";
 
 /* Custom font */
+
+@import "tailwindcss";
+
+
 .fjalla-one-regular {
   font-family: "Fjalla One", sans-serif;
   font-weight: 400;
@@ -11,6 +16,7 @@
 .banner::-webkit-scrollbar {
   display: none;
   overflow-x: auto;
+
 }
 
 body {
@@ -26,3 +32,7 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+
+
+
