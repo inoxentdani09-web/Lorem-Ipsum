@@ -1,11 +1,4 @@
-
-/* Tailwind import */
 @import "tailwindcss";
-
-/* Custom font */
-
-@import "tailwindcss";
-
 
 .fjalla-one-regular {
   font-family: "Fjalla One", sans-serif;
@@ -28,11 +21,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Code font */
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-
-
-
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
