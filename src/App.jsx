@@ -98,7 +98,7 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/contactus" element={
+        <Route path="/contact us" element={
           <>
             <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
             <Contactus />
