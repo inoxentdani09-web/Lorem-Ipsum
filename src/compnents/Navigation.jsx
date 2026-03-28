@@ -31,7 +31,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
         <ul className="hidden lg:flex items-center  gap-5 lg:gap-6.25 ml-5 lg:ml-15">
           <li className="hover:text-[#4b31cd] font-semibold"><Link to="/">Home</Link></li>
           <li className="hover:text-[#4b31cd] font-semibold"><Link to="/about" preventScrollReset = {false}>About</Link></li>
-          <li className="hover:text-[#4b31cd] font-semibold"><Link to="/Contact us">Contact Us</Link></li>
+          <li className="hover:text-[#4b31cd] font-semibold"><Link to="/Contactus">Contact Us</Link></li>
           <li className="hover:text-[#4b31cd] font-semibold"><a href="#">Crear</a></li>
           <li className="hover:text-[#4b31cd] font-semibold">  <Link to="/FAQ">FAQ</Link></li>
         </ul>
