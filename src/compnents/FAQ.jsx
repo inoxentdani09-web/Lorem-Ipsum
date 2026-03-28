@@ -46,7 +46,7 @@ const FAQ = () => {
   }
 
   return (
-    <section className="lg:min-h-screen h-181   flex flex-col items-center lg:justify-center  py-5 px-4 md:px-8">
+    <section className="min-h-screen flex flex-col items-center lg:justify-center  py-5 px-4 md:px-8">
       <div className="w-full ">
         <h1 className="text-3xl  md:text-4xl font-bold mt-15 lg:mt-0 text-[#40003a] mb-2 fjalla-one-regular">Returns & Refunds FAQs</h1>
         <p className="text-sm md:text-base text-gray-600 mb-8">Find your answers below. Click each question to expand and read the full response.</p>

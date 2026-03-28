@@ -1,7 +1,7 @@
 const Shoescard = ({ addTocart, shoe }) => {
 
   return (
-    <> <div className="w-full max-w-7xl flex items-center justify-center mx-auto">
+    <> <div className="w-full max-w-7xl flex items-center justify-center  ">
       <div className="w-72.5 overflow-hidden bg-white rounded-2xl shadow-2xl ">
 
         <div className=" overflow-hidden  rounded-xl">

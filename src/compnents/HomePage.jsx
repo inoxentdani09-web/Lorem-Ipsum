@@ -21,11 +21,11 @@ const HomePage = ({ shoesData, addTocart, searchTerm }) => {
   }, []);
   return (
     <>
-      <div className="banner p-0">
-        <Banner />
-      </div>
+     <div className="flex sm: items-center overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory h-[40vh] sm:h-[70vh] md:h-screen w-full">
+  <Banner />    
+</div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 px-4 gap-4 ">
+      <div className="w-full grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:px-4 gap-4 mt-10 sm:mt-0 ">
         {filteredShoes.length === 0 ? (
           <h2 className="card-heading">Result Not Found.....</h2>
         ) : (

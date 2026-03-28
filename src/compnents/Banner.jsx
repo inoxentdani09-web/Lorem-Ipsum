@@ -19,7 +19,7 @@ const Banner = () => {
           div.scrollLeft = 0;
         }
       }
-    }, 3000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -27,27 +27,25 @@ const Banner = () => {
   return (
     <div
       ref={scrolldiv}
-      className="flex items-center -mt-5  overflow-x-auto scroll-smooth snap-x snap-mandatory h-[60vh] sm:h-[70vh] md:h-screen banner"
+      className=" w-full flex overflow-x-auto overflow-y-hidden  pb-30 pt-30  md:pt-10  scroll-smooth snap-x snap-mandatory h-[45vh] sm:h-[0vh] md:h-[100vh] md:px-4 banner"
     >
-      <div className="shrink-0 w-full h-full flex items-center justify-center snap-center px-2 sm:px-4 md:px-10">
-        <img className="w-full h-37.5 sm:h-75 md:h-112.5  rounded-[15px] sm:rounded-[25px] md:rounded-[40px]" src="./images/banner.jpg" />
-      </div>
-
-      <div className="shrink-0 w-full h-full flex items-center justify-center snap-center px-2 sm:px-4 md:px-10">
-        <img className="w-full h-37.5 sm:h-75 md:h-112.5 rounded-[15px] sm:rounded-[25px] md:rounded-[40px]" src="./images/shoesbanner.jpg" />
-      </div>
-
-      <div className="shrink-0 w-full h-full flex items-center justify-center snap-center px-2 sm:px-4 md:px-10">
-        <img className="w-full h-37.5 sm:h-75 md:h-112.5 rounded-[15px] sm:rounded-[25px] md:rounded-[40px]" src="./images/banner2.jpg" />
-      </div>
-
-      <div className="shrink-0 w-full h-full flex items-center justify-center snap-center px-2 sm:px-4 md:px-10">
-        <img className="w-full h-37.5 sm:h-75 md:h-112.5  rounded-[15px] sm:rounded-[25px] md:rounded-[40px]" src="./images/banner3.jpg" />
-      </div>
-
-      <div className="shrink-0 w-full h-full flex items-center justify-center snap-center px-2 sm:px-4 md:px-10">
-        <img className="w-full h-37.5 sm:h-75 md:h-112.5  rounded-[15px] sm:rounded-[25px] md:rounded-[40px]" src="./images/banner4.jpg" />
-      </div>
+      {["banner.jpg",
+        "shoesbanner.jpg",
+        "banner2.jpg",
+        "banner3.jpg",
+        "banner4.jpg"].map((img, i) => (
+          <div
+            key={i}
+            className="shrink-0 w-full h-full snap-center px-2 sm:px-4  "
+          >
+            <div className="w-full h-full rounded-[15px] sm:rounded-[25px] md:rounded-[40px] overflow-hidden">
+              <img
+                className="w-full h-full object-cover bg-center"
+                src={`./images/${img}`}
+              />
+            </div>
+          </div>
+        ))}
     </div>
   );
 };

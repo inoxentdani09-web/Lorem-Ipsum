@@ -292,9 +292,9 @@ const SignupPage = () => {
                                     />
                                     <span className="text-sm text-gray-300 group-hover:text-gray-200 transition-colors">
                                         I agree to the{' '}
-                                        <a href="#terms" className="text-purple-400 hover:text-purple-300 font-semibold">
+                                       <Link to="/terms" className="text-purple-400 hover:text-purple-300 font-semibold">
                                             Terms & Conditions
-                                        </a>
+                                       </Link>
                                     </span>
                                 </label>
                                 {errors.agreeToTerms && (

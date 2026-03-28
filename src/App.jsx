@@ -13,6 +13,7 @@ import FAQ from './compnents/FAQ';
 import ScrollToTop from './ScrollToTop';
 import SignupPage from './compnents/SignupPage';
 import LoginPage from './compnents/LoginPage';
+import Terms from './compnents/TermsCondition'
 
 function App() {
 
@@ -60,8 +61,21 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+
+        <Route path="/terms" element={
+          <>
+            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+            <Terms />
+            <Footer />
+
+          </>
+        } />
+
+
+
         <Route path="/signup" element={<SignupPage isOpen={true} onClose={() => false} />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route path="/" element={
           <>
             <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
@@ -69,6 +83,7 @@ function App() {
             <Footer />
           </>
         } />
+
         <Route path="/cart" element={
           <>
             <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
@@ -97,7 +112,9 @@ function App() {
             <Footer />
           </>
         } />
+
       </Routes>
+
     </BrowserRouter>
   );
 }
