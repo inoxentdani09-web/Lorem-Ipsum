@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+<<<<<<< HEAD
 import Navigation from './compnents/Navigation';
 import Footer from './compnents/Footer';
 import ShoppingCarts from './compnents/ShoppingCarts';
@@ -32,14 +33,51 @@ function App() {
     { id: 12, brand: "Mizuno", size: "EU 36", color: "Black", price: 115, description: "Mizuno running shoes engineered for high performance and superior comfort", image: "./images/Mizuno2.webp" }
   ];
 
+=======
+import Navigation from './assets/components/Navigation';
+import Footer from './assets/components/Footer';
+import ShoppingCarts from './assets/components/ShoppingCarts';
+import About from './assets/components/about';
+import Contactus from './assets/components/Contactus';
+import HomePage from './assets/components/HomePage';
+import FAQ from './assets/components/FAQ';
+import ScrollToTop from '/ScrollToTop';
+import SignupPage from './assets/components/SignupPage';
+import LoginPage from './assets/components/LoginPage';
+import Terms from './assets/components/TermsCondition'
+import AddShoes from './assets/components/AddShoes';
+
+function App() {
+
+  const [shoesData, setShoesData] = useState([]);
+
+  // Fetch shoes data from the backend API when the component mounts
+  useEffect(() => {
+    fetch("http://localhost:5000/api/shoes")
+      .then(response => response.json())
+      .then(data => {
+        setShoesData(data);
+        console.log("Fetched shoes data:", data);
+      })
+      .catch(error => console.error("Error fetching shoes data:", error));
+  }, []);
+
+  // State for search term and cart items
+>>>>>>> c1dd4a3 (frontend fixed code)
   const [searchTerm, setSearchTerm] = useState("");
   const [cartItems, setCartItems] = useState(() => {
     const saved = localStorage.getItem("cartItems");
     return saved ? JSON.parse(saved) : [];
   });
+<<<<<<< HEAD
 
   const cartCount = cartItems.reduce((total, item) => total + (item.qty || 0), 0);
 
+=======
+  // Calculate total items in the cart
+  const cartCount = cartItems.reduce((total, item) => total + (item.qty || 0), 0);
+  // Function to add items to the cart
+>>>>>>> c1dd4a3 (frontend fixed code)
   const addTocart = (shoe) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === shoe.id);
@@ -62,6 +100,16 @@ function App() {
       <ScrollToTop />
       <Routes>
 
+<<<<<<< HEAD
+=======
+        <Route path="/add-shoe" element={
+          <>
+            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+            <AddShoes />
+            <Footer/>
+          </>
+        } />
+>>>>>>> c1dd4a3 (frontend fixed code)
         <Route path="/terms" element={
           <>
             <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
