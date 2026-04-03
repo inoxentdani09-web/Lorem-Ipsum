@@ -1,5 +1,21 @@
-const Shoescard = ({ addTocart, shoe }) => {
+import { useState } from "react";
 
+const Shoescard = ({ addTocart, shoe, onDelete }) => {
+
+
+  const handleDelete = async () => {
+    
+    try {
+      await fetch(`http://localhost:5000/api/shoes/${shoe.id}`, {
+        method: "DELETE",
+      });
+
+      onDelete(shoe.id); // 👈 UI update
+      alert("Deleted!");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <> <div className="w-full max-w-7xl flex items-center justify-center  ">
@@ -38,6 +54,13 @@ const Shoescard = ({ addTocart, shoe }) => {
               </button>
             </div>
           </div>
+         <div className="flex items-center justify-end">
+           <button onClick={() => handleDelete(shoe.id)}
+            className=' bg-red-500 mt-4 text-white rounded-lg px-4 py-1 text-xs hover:bg-red-600 transition duration-300'
+          >
+            Delete
+          </button>
+         </div>
 
         </div>
       </div>

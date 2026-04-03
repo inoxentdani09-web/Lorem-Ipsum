@@ -46,7 +46,7 @@ const ShoppingCarts = ({ cartItems, setCartItems }) => {
             >
 
               <img
-                src={item.image}
+                src={item.img}
                 className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded"
               />
 

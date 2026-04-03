@@ -3,7 +3,7 @@ import Shoescard from "./Shoescard";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = ({ shoesData, addTocart, searchTerm }) => {
+const HomePage = ({ shoesData, addTocart, searchTerm, handleDelete }) => {
   const navigate = useNavigate();
 
   // SAFE FILTER (null crash se bachao)
@@ -46,6 +46,7 @@ const HomePage = ({ shoesData, addTocart, searchTerm }) => {
               key={shoe.id}
               shoe={shoe}
               addTocart={addTocart}
+              onDelete={handleDelete}
               
             />
           ))

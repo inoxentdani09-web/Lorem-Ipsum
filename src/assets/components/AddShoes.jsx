@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function AddShoe() {
+function AddShoe({ onAddSuccess }) {
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
   const [size, setSize] = useState("");
@@ -8,17 +8,13 @@ function AddShoe() {
   const [description, setDescription] = useState("");
   const [img, setImg] = useState(null);
   const [preview, setPreview] = useState("");
- console.log("IMG OBJECT:", img);
-console.log("IMG NAME:", img?.name);
-  // IMAGE HANDLER
+
   const handleImage = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     setImg(file);
 
-    // cleanup old preview (important fix)
     if (preview) {
       URL.revokeObjectURL(preview);
     }
@@ -26,125 +22,69 @@ console.log("IMG NAME:", img?.name);
     setPreview(URL.createObjectURL(file));
   };
 
-const handleAdd = async () => {
-  const newShoe = {
-    id: Date.now(),
-    brand,
-    size,  
-    price,
-    color,
-    description,
-    img: preview
+  const handleAdd = async () => {
+    const formData = new FormData();
+
+    formData.append("brand", brand);
+    formData.append("size", size);
+    formData.append("price", price);
+    formData.append("color", color);
+    formData.append("description", description);
+    formData.append("image", img);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/shoes", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      alert("Shoe Added Successfully");
+
+      if (onAddSuccess) {
+        onAddSuccess();
+      }
+
+      setBrand("");
+      setPrice("");
+      setSize("");
+      setColor("");
+      setDescription("");
+      setImg(null);
+      setPreview("");
+    } catch (err) {
+      console.error(err);
+      alert("Error adding product");
+    }
   };
- 
-
-  await fetch("http://localhost:5000/api/shoes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(newShoe)
-  });
-
-  alert("Shoe Added!");
-};
-
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-4">
-
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 p-4">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-        {/* IMAGE PREVIEW */}
         <div className="relative bg-black flex items-center justify-center p-6">
-
           {preview ? (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-full h-[350px] object-contain rounded-xl"
-            />
+            <img className="w-full object-center rounded-xl" src={preview} />
           ) : (
             <p className="text-white">No Image Selected</p>
           )}
-
-          <div className="absolute bottom-4 left-4 text-white text-sm bg-black/40 px-3 py-1 rounded-full">
-            Preview
-          </div>
         </div>
 
-        {/* FORM */}
         <div className="p-8 flex flex-col justify-center space-y-4">
 
           <h2 className="text-2xl font-bold">Product Details</h2>
 
-          <input
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Brand"
-          />
+          <input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Brand" className="w-full p-3 border rounded-xl" />
+          <input value={size} onChange={(e) => setSize(e.target.value)} placeholder="Size" className="w-full p-3 border rounded-xl" />
+          <input value={color} onChange={(e) => setColor(e.target.value)} placeholder="Color" className="w-full p-3 border rounded-xl" />
+          <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price" className="w-full p-3 border rounded-xl" />
 
-          <input
-            value={size}
-            onChange={(e) => setSize(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Size"
-          />
+          <input type="file" accept="image/*" onChange={handleImage} className="border-2 rounded-2xl px-3 py-1 border-dotted w-1/2" />
 
-          <input
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Color"
-          />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="w-full p-3 border rounded-xl" />
 
-          <input
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Price"
-          />
-
-          {/* CLEAN IMAGE UPLOAD UI */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Product Image
-            </label>
-
-            <label
-              htmlFor="fileInput"
-              className="cursor-pointer w-full flex items-center justify-center p-3 border-2 border-dashed border-gray-400 rounded-xl hover:bg-gray-100 transition"
-            >
-              📁 Click to Select Image
-            </label>
-
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={handleImage}
-              className="hidden"
-            />
-
-            {img && (
-              <p className="text-sm text-green-600 mt-2">
-                Selected: {img.name}
-              </p>
-            )}
-          </div>
-
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Description"
-          />
-
-          <button
-            onClick={handleAdd}
-            className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition"
-          >
+          <button onClick={handleAdd} className="w-full bg-black text-white py-3 rounded-xl">
             Save Product
           </button>
 

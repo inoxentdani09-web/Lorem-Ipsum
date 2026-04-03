@@ -1,92 +1,54 @@
-// App.jsx
 import React, { useEffect, useState } from "react";
-import './index.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./index.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-<<<<<<< HEAD
-import Navigation from './compnents/Navigation';
-import Footer from './compnents/Footer';
-import ShoppingCarts from './compnents/ShoppingCarts';
-import About from './compnents/about';
-import Contactus from './compnents/Contactus';
-import HomePage from './compnents/HomePage';
-import FAQ from './compnents/FAQ';
-import ScrollToTop from './ScrollToTop';
-import SignupPage from './compnents/SignupPage';
-import LoginPage from './compnents/LoginPage';
-import Terms from './compnents/TermsCondition'
-
-function App() {
-
-  const shoesData = [
-    { id: 1, brand: "Nike", size: "EU 38", color: "Red / White", price: 120, description: "Comfortable Nike running shoes perfect for daily jogging.", image: "./images/shoes.avif" },
-    { id: 2, brand: "Adidas", size: "EU 40", color: "White / Blue", price: 110, description: "Lightweight Adidas sports shoes with breathable material.", image: "./images/adidas.webp" },
-    { id: 3, brand: "Puma", size: "EU 39", color: "Black / White", price: 95, description: "Stylish Puma sneakers designed for casual wear.", image: "./images/pumashoes.webp" },
-    { id: 4, brand: "Reebok", size: "EU 41", color: "Grey / White", price: 100, description: "Classic Reebok training shoes with strong grip.", image: "./images/reebookshoes.webp" },
-    { id: 5, brand: "New Balance", size: "EU 42", color: "Navy Blue", price: 130, description: "Premium New Balance running shoes with extra comfort.", image: "./images/newbalance.jpg" },
-    { id: 6, brand: "Under Armour", size: "EU 43", color: "Black", price: 125, description: "Under Armour performance shoes for athletes.", image: "./images/underarmour.jpg" },
-    { id: 7, brand: "Converse", size: "EU 40", color: "White", price: 85, description: "Classic Converse sneakers perfect for street style.", image: "./images/converse.jpg" },
-    { id: 8, brand: "Vans", size: "EU 41", color: "Black / White", price: 90, description: "Trendy Vans skate shoes with durable sole.", image: "./images/vans.webp" },
-    { id: 9, brand: "Skechers", size: "EU 42", color: "Grey", price: 105, description: "Soft Skechers walking shoes with memory foam.", image: "./images/skechers.jpg" },
-    { id: 10, brand: "Asics", size: "EU 39", color: "Blue / Green", price: 115, description: "High performance Asics running shoes for sports.", image: "./images/asics.webp" },
-    { id: 11, brand: "Fila", size: "EU 49", color: "Black", price: 120, description: "Stylish Fila sneakers with comfortable cushioning for daily wear.", image: "./images/fila.webp" },
-    { id: 12, brand: "Mizuno", size: "EU 36", color: "Black", price: 115, description: "Mizuno running shoes engineered for high performance and superior comfort", image: "./images/Mizuno2.webp" }
-  ];
-
-=======
-import Navigation from './assets/components/Navigation';
-import Footer from './assets/components/Footer';
-import ShoppingCarts from './assets/components/ShoppingCarts';
-import About from './assets/components/about';
-import Contactus from './assets/components/Contactus';
-import HomePage from './assets/components/HomePage';
-import FAQ from './assets/components/FAQ';
-import ScrollToTop from '/ScrollToTop';
-import SignupPage from './assets/components/SignupPage';
-import LoginPage from './assets/components/LoginPage';
-import Terms from './assets/components/TermsCondition'
-import AddShoes from './assets/components/AddShoes';
+import Navigation from "./assets/components/Navigation";
+import Footer from "./assets/components/Footer";
+import ShoppingCarts from "./assets/components/ShoppingCarts";
+import About from "./assets/components/about";
+import Contactus from "./assets/components/Contactus";
+import HomePage from "./assets/components/HomePage";
+import FAQ from "./assets/components/FAQ";
+import ScrollToTop from "./ScrollToTop";
+import SignupPage from "./assets/components/SignupPage";
+import LoginPage from "./assets/components/LoginPage";
+import Terms from "./assets/components/TermsCondition";
+import AddShoes from "./assets/components/AddShoes";
 
 function App() {
-
   const [shoesData, setShoesData] = useState([]);
-
-  // Fetch shoes data from the backend API when the component mounts
-  useEffect(() => {
-    fetch("http://localhost:5000/api/shoes")
-      .then(response => response.json())
-      .then(data => {
-        setShoesData(data);
-        console.log("Fetched shoes data:", data);
-      })
-      .catch(error => console.error("Error fetching shoes data:", error));
-  }, []);
-
-  // State for search term and cart items
->>>>>>> c1dd4a3 (frontend fixed code)
   const [searchTerm, setSearchTerm] = useState("");
   const [cartItems, setCartItems] = useState(() => {
     const saved = localStorage.getItem("cartItems");
     return saved ? JSON.parse(saved) : [];
   });
-<<<<<<< HEAD
 
-  const cartCount = cartItems.reduce((total, item) => total + (item.qty || 0), 0);
+  const fetchShoes = () => {
+    fetch("http://localhost:5000/api/shoes")
+      .then((res) => res.json())
+      .then((data) => setShoesData(data))
+      .catch((err) => console.error(err));
+  };
 
-=======
-  // Calculate total items in the cart
-  const cartCount = cartItems.reduce((total, item) => total + (item.qty || 0), 0);
-  // Function to add items to the cart
->>>>>>> c1dd4a3 (frontend fixed code)
+  useEffect(() => {
+    fetchShoes();
+  }, []);
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + (item.qty || 0),
+    0
+  );
+
   const addTocart = (shoe) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === shoe.id);
-      if (existingItem) {
-        return prevItems.map(item =>
+    setCartItems((prev) => {
+      const exist = prev.find((item) => item.id === shoe.id);
+
+      if (exist) {
+        return prev.map((item) =>
           item.id === shoe.id ? { ...item, qty: item.qty + 1 } : item
         );
       } else {
-        return [...prevItems, { ...shoe, qty: 1 }];
+        return [...prev, { ...shoe, qty: 1 }];
       }
     });
   };
@@ -95,74 +57,103 @@ function App() {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const handleDelete = (id) => {
+    setShoesData((prev) => prev.filter((shoe) => shoe.id !== id));
+  };
+
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        <Route
+          path="/add-shoe"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <AddShoes onAddSuccess={fetchShoes} />
+              <Footer />
+            </>
+          }
+        />
 
-<<<<<<< HEAD
-=======
-        <Route path="/add-shoe" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <AddShoes />
-            <Footer/>
-          </>
-        } />
->>>>>>> c1dd4a3 (frontend fixed code)
-        <Route path="/terms" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <Terms />
-            <Footer />
+        <Route
+          path="/terms"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <Terms />
+              <Footer />
+            </>
+          }
+        />
 
-          </>
-        } />
-
-
-
-        <Route path="/signup" element={<SignupPage isOpen={true} onClose={() => false} />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        <Route path="/" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <HomePage shoesData={shoesData} addTocart={addTocart} searchTerm={searchTerm} />
-            <Footer />
-          </>
-        } />
+        <Route
+          path="/"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <HomePage
+                shoesData={shoesData}
+                addTocart={addTocart}
+                searchTerm={searchTerm}
+                handleDelete={handleDelete}
+              />
+              <Footer />
+            </>
+          }
+        />
 
-        <Route path="/cart" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <ShoppingCarts cartItems={cartItems} setCartItems={setCartItems} searchIno={searchTerm} />
-            <Footer />
-          </>
-        } />
-        <Route path="/about" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <About />
-            <Footer />
-          </>
-        } />
-        <Route path="/contact us" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <Contactus />
-            <Footer />
-          </>
-        } />
-        <Route path="/faq" element={
-          <>
-            <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
-            <FAQ />
-            <Footer />
-          </>
-        } />
+        <Route
+          path="/cart"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <ShoppingCarts
+                cartItems={cartItems}
+                setCartItems={setCartItems}
+                searchIno={searchTerm}
+              />
+              <Footer />
+            </>
+          }
+        />
 
+        <Route
+          path="/about"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <About />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/contact us"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <Contactus />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/faq"
+          element={
+            <>
+              <Navigation cartCount={cartCount} setSearchTerm={setSearchTerm} />
+              <FAQ />
+              <Footer />
+            </>
+          }
+        />
       </Routes>
-
     </BrowserRouter>
   );
 }
