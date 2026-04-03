@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
-
+const mongoose = require("mongoose");
+require("dotenv").config();
 const app = express();
 
 app.use(cors());
@@ -60,7 +61,35 @@ app.delete("/api/shoes/:id", (req, res) => {
 
   res.json({ message: "Deleted", id });
 });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.error("MongoDB connection error:", err));
 
-app.listen(5000, () => {
+const Contact = mongoose.model("Contact", {
+ name: String,
+ email: String,
+ phone: String,
+ message: String
+});
+app.post("/contact", (req, res) => {
+        try { 
+          const contact = new Contact(req.body);
+          contact.save()
+            .then(() => res.send("Contact saved"))
+            .catch((err) => {
+              console.error("Error saving contact:", err);
+              res.status(500).send("Error saving contact");
+            });
+        } catch (error) {
+          console.error("Error processing contact:", error);
+          res.status(500).send("Error processing contact");
+        }
+});
+
+
+app.listen(1000, () => {
   console.log("Server running on 5000");
 });
