@@ -1,11 +1,10 @@
-﻿const express = require("express");
+const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { OAuth2Client } = require("google-auth-library");
 
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 
@@ -13,12 +12,6 @@ const app = express();
 const MONGO_URI = process.env.MONGO_URI?.trim();
 const JWT_SECRET = process.env.JWT_SECRET?.trim() || "default_jwt_secret";
 const PORT = Number(process.env.PORT) || 5000;
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID?.trim();
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET?.trim();
-const FRONTEND_URL = process.env.FRONTEND_URL?.trim() || "http://localhost:5173";
-const BACKEND_URL = process.env.BACKEND_URL?.trim() || `http://localhost:${PORT}`;
-const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI?.trim() || `${BACKEND_URL}/auth/google/callback`;
-const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // ===== OFFLINE MODE FLAG =====
 let isOfflineMode = false;
@@ -26,10 +19,6 @@ let isOfflineMode = false;
 console.log("🔧 Loading environment variables...");
 console.log("MONGO_URI present:", !!MONGO_URI);
 console.log("JWT_SECRET present:", !!JWT_SECRET);
-console.log("GOOGLE_CLIENT_ID present:", !!GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIENT_SECRET present:", !!GOOGLE_CLIENT_SECRET);
-console.log("FRONTEND_URL:", FRONTEND_URL);
-console.log("BACKEND_URL:", BACKEND_URL);
 
 // ===== MIDDLEWARE =====
 app.use(
@@ -43,7 +32,6 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(express.json({ limit: "10mb" }));
 app.use("/images", express.static(path.join(__dirname, "images")));
 console.log("📁 Static images folder served at /images");
 
@@ -192,9 +180,6 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
-  picture: { type: String, default: "" },
-  googleId: { type: String, unique: true, sparse: true },
-  provider: { type: String, default: "local" },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -226,90 +211,6 @@ const upload = multer({ storage });
 // ===== UTILS =====
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const buildGoogleAuthUrl = () => {
-  const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-  const options = {
-    redirect_uri: GOOGLE_REDIRECT_URI,
-    client_id: GOOGLE_CLIENT_ID,
-    access_type: "offline",
-    response_type: "code",
-    prompt: "consent",
-    scope: "openid email profile",
-    include_granted_scopes: "true",
-  };
-  return `${rootUrl}?${new URLSearchParams(options).toString()}`;
-};
-
-const createOrLoginGoogleUser = async (googleProfile) => {
-  const email = googleProfile.email?.toLowerCase().trim();
-  if (!email) {
-    throw new Error("Google profile is missing email.");
-  }
-
-  const firstName =
-    googleProfile.given_name ||
-    googleProfile.name?.split(" ")[0] ||
-    "Google";
-  const lastName =
-    googleProfile.family_name ||
-    googleProfile.name?.split(" ").slice(1).join(" ") ||
-    "User";
-
-  const randomPassword = `google-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
-  if (mongoose.connection.readyState === 1) {
-    let user = await User.findOne({ email });
-    if (!user) {
-      user = await User.create({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email,
-        password: hashedPassword,
-      });
-    }
-
-    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-
-    return {
-      user: {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
-      token,
-    };
-  }
-
-  let user = offlineUsers.find((item) => item.email === email);
-  if (!user) {
-    user = {
-      id: Date.now().toString(),
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email,
-      password: hashedPassword,
-      createdAt: new Date(),
-    };
-    offlineUsers.push(user);
-  }
-
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "7d",
-  });
-
-  return {
-    user: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-    },
-    token,
-  };
-};
-
 // ===== ROUTES =====
 
 // TEST ROUTE
@@ -321,177 +222,6 @@ app.delete("/test", (req, res) => {
 app.get("/testget", (req, res) => {
   console.log("🧪 TEST GET ROUTE CALLED");
   res.json({ message: "Test GET route works" });
-});
-
-app.post("/api/auth/google", async (req, res) => {
-  try {
-    const { idToken } = req.body;
-    if (!idToken) {
-      return res.status(400).json({ error: "Google ID token is required." });
-    }
-
-    if (!GOOGLE_CLIENT_ID) {
-      return res.status(500).json({ error: "Google OAuth client ID is not configured." });
-    }
-
-    const ticket = await googleClient.verifyIdToken({
-      idToken,
-      audience: GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-
-    if (!payload || !payload.email) {
-      return res.status(401).json({ error: "Google token verification failed." });
-    }
-
-    const email = payload.email.toLowerCase();
-    const googleId = payload.sub;
-    const picture = payload.picture || "";
-    const firstName = payload.given_name || payload.name?.split(" ")[0] || "Google";
-    const lastName = payload.family_name || payload.name?.split(" ").slice(1).join(" ") || "User";
-
-    if (mongoose.connection.readyState === 1) {
-      let user = await User.findOne({ email });
-      if (!user) {
-        const hashedPassword = await bcrypt.hash(`google-${googleId}-${Date.now()}`, 10);
-        user = await User.create({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email,
-          password: hashedPassword,
-          picture,
-          googleId,
-          provider: "google",
-        });
-      } else {
-        if (!user.googleId) {
-          user.googleId = googleId;
-          user.provider = "google";
-          user.picture = user.picture || picture;
-          await user.save();
-        }
-      }
-
-      const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
-        expiresIn: "7d",
-      });
-
-      return res.status(200).json({
-        user: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          picture: user.picture,
-        },
-        token,
-      });
-    }
-
-    const existingUser = offlineUsers.find((u) => u.email === email);
-    let offlineUser = existingUser;
-    if (!offlineUser) {
-      const hashedPassword = await bcrypt.hash(`google-${googleId}-${Date.now()}`, 10);
-      offlineUser = {
-        id: Date.now().toString(),
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email,
-        password: hashedPassword,
-        picture,
-        googleId,
-        provider: "google",
-        createdAt: new Date(),
-      };
-      offlineUsers.push(offlineUser);
-    }
-
-    const token = jwt.sign({ id: offlineUser.id, email: offlineUser.email }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
-
-    return res.status(200).json({
-      user: {
-        firstName: offlineUser.firstName,
-        lastName: offlineUser.lastName,
-        email: offlineUser.email,
-        picture: offlineUser.picture,
-      },
-      token,
-    });
-  } catch (err) {
-    console.error("❌ GOOGLE AUTH ERROR:", err.message || err);
-    return res.status(500).json({ error: "Google sign-in failed." });
-  }
-});
-
-app.get("/auth/google", (req, res) => {
-  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-    return res.status(500).send(`
-      <html>
-        <body style="font-family: Arial, sans-serif; background: #111; color: #fff; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
-          <div style="max-width: 540px; padding:32px; border-radius:16px; background: rgba(0,0,0,0.85); box-shadow: 0 0 40px rgba(0,0,0,0.25);">
-            <h1 style="margin-top:0; color:#f8f8f8;">Google OAuth not configured</h1>
-            <p style="color:#ccc; line-height:1.6;">To enable Google sign-in, set <strong>GOOGLE_CLIENT_ID</strong> and <strong>GOOGLE_CLIENT_SECRET</strong> in your backend <code>.env</code> file.</p>
-            <p style="color:#ccc;">Then restart the backend and click the Google button again.</p>
-          </div>
-        </body>
-      </html>
-    `);
-  }
-  const authUrl = buildGoogleAuthUrl();
-  console.log("🔗 Redirecting to Google OAuth", authUrl);
-  res.redirect(authUrl);
-});
-
-app.get("/auth/google/callback", async (req, res) => {
-  try {
-    const code = req.query.code;
-    if (!code) {
-      return res.status(400).json({ error: "Missing authorization code." });
-    }
-
-    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        code,
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: GOOGLE_REDIRECT_URI,
-        grant_type: "authorization_code",
-      }),
-    });
-
-    const tokenData = await tokenResponse.json();
-    if (!tokenData.id_token) {
-      console.error("❌ Google token exchange failed", tokenData);
-      return res.status(500).json({ error: "Failed to retrieve Google ID token." });
-    }
-
-    const profileResponse = await fetch(
-      `https://oauth2.googleapis.com/tokeninfo?id_token=${tokenData.id_token}`
-    );
-    const googleProfile = await profileResponse.json();
-    if (!googleProfile.email) {
-      console.error("❌ Google profile missing email", googleProfile);
-      return res.status(500).json({ error: "Failed to verify Google profile." });
-    }
-
-    const { user, token } = await createOrLoginGoogleUser(googleProfile);
-    const redirectUrl = `${FRONTEND_URL}/google-callback?token=${encodeURIComponent(
-      token
-    )}&firstName=${encodeURIComponent(user.firstName)}&lastName=${encodeURIComponent(
-      user.lastName
-    )}&email=${encodeURIComponent(user.email)}`;
-
-    console.log("✅ Google login successful, redirecting back to frontend");
-    res.redirect(redirectUrl);
-  } catch (error) {
-    console.error("❌ GOOGLE AUTH CALLBACK ERROR:", error);
-    res.status(500).json({ error: "Google login failed." });
-  }
 });
 
 // GET ALL SHOES
