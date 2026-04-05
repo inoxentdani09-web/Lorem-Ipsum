@@ -13,8 +13,9 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    navigate('/Login');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   const closeMenu = () => {
@@ -36,7 +37,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
           <li className="hover:text-[#4b31cd] font-semibold">  <Link to="/FAQ">FAQ</Link></li>
         </ul>
 
-        <div className='flex items-center gap-4 md:gap-4'>
+        <div className='flex items-center gap-3 md:gap-4'>
           <div className="hidden sm:flex items-center">
             <input
               type="text"
@@ -106,7 +107,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
   ${open ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"} lg:hidden`}
       >
         <div className='flex items-center justify-between   px-2 bg-linear-to-r from-[#cfcae9] to-[#1a0765] rounded-b-xl '>
-          <img src="./images/logo.png" alt="Logo" className="sm:w-24 w-20" />
+          <img src="/images/logo.png" alt="Logo" className="sm:w-24 w-20" />
           <button
             onClick={closeMenu}
             className="text-white/50 text-2xl hover:bg-white/20 p-2 rounded-lg transition-all duration-200"

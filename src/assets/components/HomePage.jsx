@@ -23,11 +23,11 @@ const HomePage = ({ shoesData, addTocart, searchTerm, handleDelete }) => {
   console.log("fetch", shoesData);
 
   useEffect(() => {
-    const user = localStorage.getItem("userData");
-    if (!user) {
-      navigate("/Login");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <>
@@ -58,7 +58,7 @@ const HomePage = ({ shoesData, addTocart, searchTerm, handleDelete }) => {
       {/* BOTTOM BANNER */}
       <div className="mt-10 w-full px-5 flex justify-center items-center">
         <img
-          src="./images/bottombanner.jpg"
+          src="/images/bottombanner.jpg"
           alt=""
           className="w-full h-90 rounded-2xl bg-center bg-cover"
         />

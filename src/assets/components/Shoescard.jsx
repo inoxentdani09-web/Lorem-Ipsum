@@ -6,7 +6,7 @@ const Shoescard = ({ addTocart, shoe, onDelete }) => {
   const handleDelete = async () => {
     
     try {
-      await fetch(`http://localhost:5000/api/shoes/${shoe.id}`, {
+      await fetch(`/api/shoes/${shoe.id}`, {
         method: "DELETE",
       });
 

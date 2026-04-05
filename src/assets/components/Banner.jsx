@@ -41,7 +41,7 @@ const Banner = () => {
             <div className="w-full h-full rounded-[15px] sm:rounded-[25px] md:rounded-[40px] overflow-hidden">
               <img
                 className="w-full h-full object-cover bg-center"
-                src={`./images/${img}`}
+                src={`/images/${img}`}
               />
             </div>
           </div>
