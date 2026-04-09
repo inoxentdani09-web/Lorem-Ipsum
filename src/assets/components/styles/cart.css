@@ -28,3 +28,10 @@
     transform: translateX(0);
   }
 } */
+.logo {
+  filter: none;
+}
+
+.dark .logo {
+  filter: brightness(0) invert(1);
+}

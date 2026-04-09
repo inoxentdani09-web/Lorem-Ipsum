@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-white px-4 sm:px-6 py-6 mt-10 text-[#333]">
+    <footer className="bg-white px-4 sm:px-6 py-6 mt-10 text-[#333] text-black dark:text-white">
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-10 max-w-300 mx-auto">
 
         <div className="flex justify-center md:justify-start">
-          <img src="/images/logo.png" alt="logo" className="w-30 sm:w-35" />
+          <img src="/images/logo.png" alt="logo" className="w-30 sm:w-35 dark: logo" />
         </div>
 
         <div>
@@ -25,22 +25,22 @@ const Footer = () => {
           <div className="text-[14px] space-y-3 text-center md:text-left">
 
             <div>
-              <p className="text-[15px] font-semibold">Call</p>
-              <p className="text-[13px]">+92 318 2315238</p>
+              <p className="text-[15px] font-semibold ">Call</p>
+              <p className="text-[13px] ">+92 318 2315238</p>
             </div>
 
             <div>
-              <p className="text-[15px] font-semibold">Email</p>
-              <p className="text-[13px]">inoxentdani09@gmail.com</p>
+              <p className="text-[15px] font-semibold ">Email</p>
+              <p className="text-[13px] ">inoxentdani09@gmail.com</p>
             </div>
 
             <div className="flex items-center justify-center md:justify-start">
               <input
                 type="email"
                 placeholder="Write Email"
-                className="text-[13px] py-1 px-2 w-full md:text-[12px] sm:w-auto outline-none border border-[#ccc] border-r-0 rounded-l-lg"
+                className="text-[13px]  py-1 px-2 w-full md:text-[12px] sm:w-auto outline-none border border-[#ccc] border-r-0 rounded-l-lg"
               />
-              <button className="bg-[#5E558A] text-white py-1 md:py-1 px-3 md:text-[13px] rounded-r-lg hover:bg-[#908ab0]">
+              <button className="bg-[#5E558A]  text-white py-1 md:py-1 px-3 md:text-[13px] rounded-r-lg hover:bg-[#908ab0]">
                 Send
               </button>
             </div>
@@ -50,7 +50,7 @@ const Footer = () => {
 
       </div>
 
-      <div className="px-4 sm:px-6 mt-6 border-t border-[#ccc] pt-6">
+      <div className="px-4 sm:px-6 mt-6 border-t border-[#ccc] pt-6 text-black dark:text-white">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 max-w-300 mx-auto">
 
           <div className="flex flex-col items-center md:items-start gap-3">

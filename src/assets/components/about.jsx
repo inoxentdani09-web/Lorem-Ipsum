@@ -121,7 +121,7 @@ const About = () => {
                 <img src={item.img} className="w-full h-full object-contain" />
               </div>
 
-              <p>{item.text}</p>
+              <p className="text-black dark:text-white font-semibold">{item.text}</p>
 
             </div>
 

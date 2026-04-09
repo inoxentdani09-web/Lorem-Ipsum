@@ -89,7 +89,7 @@ function App() {
       <button
         type="button"
         onClick={toggleTheme}
-        className="theme-switcher fixed right-4 top-1/2 z-50 flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-xl transition hover:bg-slate-100 transform -translate-y-1/2"
+        className="theme-switcher fixed right-0 top-1/2 z-50 flex items-center gap-2 rounded-full border border-slate-300 bg-white px-2 py-2 text-sm font-medium text-slate-900 shadow-xl transition hover:bg-slate-100 transform -translate-y-1/2"
       >
         {theme === "dark" ? <HiOutlineSun className="text-lg" /> : <HiOutlineMoon className="text-lg" />}
         {theme === "dark" ? "Light Mode" : "Dark Mode"}
@@ -115,14 +115,8 @@ function App() {
           path="/terms"
           element={
             <>
-              <Navigation
-                cartCount={cartCount}
-                setSearchTerm={setSearchTerm}
-                theme={theme}
-                toggleTheme={toggleTheme}
-              />
               <Terms />
-              <Footer />
+             
             </>
           }
         />

@@ -161,36 +161,36 @@ const SignupPage = () => {
         setIsLoading(true)
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                firstName: formData.firstName.trim(),
-                lastName: formData.lastName.trim(),
-                email: formData.email.trim(),
-                password: formData.password,
-            }),
-        })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: formData.firstName.trim(),
+                    lastName: formData.lastName.trim(),
+                    email: formData.email.trim(),
+                    password: formData.password,
+                }),
+            })
 
-        let data;
-        try {
-            data = await response.json();
-        } catch (jsonError) {
-            console.error('JSON parsing error:', jsonError);
-            setErrors({ form: 'Server returned invalid response. Please try again.' });
-            return;
-        }
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                console.error('JSON parsing error:', jsonError);
+                setErrors({ form: 'Server returned invalid response. Please try again.' });
+                return;
+            }
 
-        if (!response.ok) {
-            setErrors({ form: data.error || 'Unable to create account.' })
-            return
-        }
+            if (!response.ok) {
+                setErrors({ form: data.error || 'Unable to create account.' })
+                return
+            }
 
-        setSuccessMessage('Account created successfully! Please log in.')
-        setTimeout(() => {
-            navigate('/login')
-        }, 1000)
+            setSuccessMessage('Account created successfully! Please log in.')
+            setTimeout(() => {
+                navigate('/login')
+            }, 1000)
 
         } catch (error) {
             console.error('Signup error:', error)
@@ -324,9 +324,9 @@ const SignupPage = () => {
                                     />
                                     <span className="text-sm text-gray-300 group-hover:text-gray-200 transition-colors">
                                         I agree to the{' '}
-                                       <Link to="/terms" className="text-purple-400 hover:text-purple-300 font-semibold">
+                                        <Link to="/terms" className="text-purple-400 hover:text-purple-300 font-semibold">
                                             Terms & Conditions
-                                       </Link>
+                                        </Link>
                                     </span>
                                 </label>
                                 {errors.agreeToTerms && (
@@ -362,7 +362,7 @@ const SignupPage = () => {
                                 onSuccess={handleGoogleSuccess}
                                 onError={handleGoogleError}
                                 buttonClassName="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg border border-gray-600 hover:border-gray-500 transition-all"
-                                label="Continue with Google"
+                                label=" Google"
                             />
 
                             <button

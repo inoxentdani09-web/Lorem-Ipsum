@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import './styles/cart.css';
 import { useState } from "react";
 
-const Navigation = ({ cartCount, setSearchTerm }) => {
+const Navigation = ({ cartCount, setSearchTerm}) => {
   const [searchInput, setsearchInput] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
           <img src="/images/logo.png" alt="Logo" />
         </div>
 
-        <ul className="hidden lg:flex items-center  gap-5 lg:gap-6.25 ml-5 lg:ml-15">
+        <ul className="hidden lg:flex items-center  gap-5 lg:gap-6.25 ml-5 lg:ml-15 ">
           <li className="hover:text-[#4b31cd] font-semibold"><Link to="/">Home</Link></li>
           <li className="hover:text-[#4b31cd] font-semibold"><Link to="/about" preventScrollReset={false}>About</Link></li>
           <li className="hover:text-[#4b31cd] font-semibold"><Link to="/Contact us">Contact Us</Link></li>
@@ -41,7 +41,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
           <div className="hidden sm:flex items-center">
             <input
               type="text"
-              className="bg-[#c6c1c1] px-3 md:px-4 py-2  rounded-tl-lg rounded-bl-lg text-[14px] md:text-[10px] outline-none"
+              className=" bg-[#c6c1c1] dark:gray-300 px-3 md:px-4 py-2  rounded-tl-lg rounded-bl-lg text-[14px] md:text-[10px] outline-none"
               placeholder="Search"
               value={searchInput}
               onChange={(e) => {
@@ -54,14 +54,14 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <p
-              className="flex items-center bg-[#5E558A] hover:bg-[#75708b] px-3 md:px-4 md:text-[15px] py-2  text-white rounded-tr-lg rounded-br-lg cursor-pointer  transition"
+              className="flex items-center bg-[#5E558A] hover:bg-[#75708b] px-3 md:px-4 md:text-[15px] py-2   rounded-tr-lg rounded-br-lg cursor-pointer  transition text-white dark:text-white"
               onClick={handleSearch}
             >
               <FaSearch />
             </p>
           </div>
 
-          <div className="px-1 md:px-2 flex items-center relative">
+          <div className="px-1 md:px-2 flex items-center relative text-black">
             <Link to="/cart">
               <span className="absolute -top-2 -right-2 w-4 h-4 md:w-4.5 md:h-4.5 rounded-full bg-[#5E558A] text-white text-[10px] md:text-xs flex items-center justify-center">
                 {cartCount}
@@ -70,7 +70,7 @@ const Navigation = ({ cartCount, setSearchTerm }) => {
             </Link>
           </div>
             <Link to="/add-shoe">
-    <button className="hidden lg:block px-4 py-1 bg-green-500 hover:bg-green-600 text-white text-sm rounded-full transition">
+    <button className="hidden lg:block px-4 py-1 border-2 border-[#5E558A] hover:bg-[#5E558A]  text-sm rounded-full transition text-black font-semibold dark:text-white">
       Add Shoe
     </button>
   </Link>
